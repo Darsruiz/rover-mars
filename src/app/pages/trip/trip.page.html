@@ -1,0 +1,39 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-title>The trip will start in ... {{ helpers.secondsLeft >= 0 ? helpers.secondsLeft : 0 }}</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+
+<ion-content *ngIf="finished">
+    <ion-grid>
+        <ion-col>
+            <ion-row>
+                <ion-card>
+                    <ion-card-title>
+                        THE TRIP FINISHED, HERE ARE THE RESULTS
+                    </ion-card-title>
+                    <ion-card-content>
+                        <app-rover [success]="( helpers.rover$ | async )?.successTrip" [xWidth]="( helpers.rover$ | async )?.coordinates?.xWidth" [yHeight]="( helpers.rover$ | async )?.coordinates?.yHeight" [orientation]="( helpers.rover$ | async )?.orientation" [style.bottom]=" ( helpers.rover$ | async )?.coordinates?.yHeight | addPx"
+                            [style.left]="( helpers.rover$ | async )?.coordinates?.xWidth | addPx"></app-rover>
+
+                    </ion-card-content>
+                </ion-card>
+            </ion-row>
+        </ion-col>
+    </ion-grid>
+
+</ion-content>
+<ion-footer>
+    <ion-button [disabled]="helpers.stateTrip === 'ongoing'" expand="full" (click)="navigateBack()">TRY AGAIN</ion-button>
+</ion-footer>
+
+
+
+
+<div *ngIf="!finished" class="square" [style.width]="getWidth()" [style.height]="getHeight()">
+
+
+    <app-rover class="rover" [success]="( helpers.rover$ | async )?.successTrip" [xWidth]="( helpers.rover$ | async )?.coordinates?.xWidth" [yHeight]="( helpers.rover$ | async )?.coordinates?.yHeight" [orientation]="( helpers.rover$ | async )?.orientation"
+        [style.bottom]=" ( helpers.rover$ | async )?.coordinates?.yHeight | addPx" [style.left]="( helpers.rover$ | async )?.coordinates?.xWidth | addPx"></app-rover>
+</div>

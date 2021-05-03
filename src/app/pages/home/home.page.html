@@ -1,0 +1,179 @@
+<ion-header color="primary" [translucent]="true">
+    <ion-toolbar color="primary">
+        <ion-title>
+            WELLCOME TO MARS
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+    <ion-slides #sliderSettings (ionSlideDidChange)="slideChanged()">
+        <ion-slide>
+            <ion-card>
+                <ion-card-header>
+                    <ion-card-title>
+                        SET SQUARE SETTINGS
+                    </ion-card-title>
+                    <ion-card-subtitle>
+                        Specify the SIZE OF THE SQUARE. The initial position and orientation of the ROVER. And the delay in miliseconds of the animation ( this last one is optional )
+                    </ion-card-subtitle>
+                </ion-card-header>
+                <ion-card-content>
+                    <ion-row>
+                        <ion-text>
+                            Square dimensions
+                        </ion-text>
+                    </ion-row>
+                    <app-input-coordinates (updateSquare)="updateSquare($event)" [width]="helpers.getSquare().width" [height]="helpers.getSquare().height">
+                    </app-input-coordinates>
+
+                </ion-card-content>
+            </ion-card>
+        </ion-slide>
+        <ion-slide>
+            <ion-card>
+                <ion-card-header>
+                    <ion-card-title>
+                        ROVER INITIAL POSITION AND ORIENTATION
+                    </ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+
+
+                    <app-input-coordinates [inSquareHeight]="inSquareHeight" [inSquareWidth]="inSquareWidth" [width]="rover.coordinates.xWidth" [height]="rover.coordinates.yHeight" [width]="rover.coordinates.xWidth" [height]="rover.coordinates.yHeight" (updateSquare)="initialCoordinatesOfRover($event)">
+
+                    </app-input-coordinates>
+
+                    <ion-item>
+                        <ion-icon slot="start" [color]="(inSquareHeight && inSquareWidth) ?  'success' : 'danger'" [name]="(inSquareHeight && inSquareWidth) ?  'thumbs-up' : 'thumbs-down'">
+
+                        </ion-icon>
+                        <ion-label>
+                            <ion-text [color]="(inSquareHeight && inSquareWidth) ?  'success' : 'danger'">
+                                {{ (inSquareHeight && inSquareWidth) ? 'The rover starts inside the square' : 'Please, place the rover inside the square' }}
+
+                            </ion-text>
+                        </ion-label>
+                    </ion-item>
+
+                    <app-orientation-selector *ngIf="slideIndex === 1" [resetOrientation]="(slideIndex === 0)" (orientation)="initialOrientationOfRover($event)"></app-orientation-selector>
+
+
+                </ion-card-content>
+
+
+
+
+            </ion-card>
+
+        </ion-slide>
+        <!--
+        <ion-slide *ngIf="false">
+            <ion-card>
+                <ion-card-header>
+                    <ion-card-title>
+                        OPTIONAL
+                    </ion-card-title>
+                    <ion-card-subtitle>
+                        Stablish the delay between each order in miliseconds, you decide, the speed, less time, more speed
+                    </ion-card-subtitle>
+                    <ion-card-content>
+                        <ion-row>
+                            <ion-col>
+                                <ion-chip color="primary">
+                                    {{ helpers.delay }}
+                                </ion-chip>
+                            </ion-col>
+
+                        </ion-row>
+                        <ion-range (ionChange)="setDelay($event)" min="300" max="1800" step="100">
+
+                        </ion-range>
+                    </ion-card-content>
+                </ion-card-header>
+            </ion-card>
+        </ion-slide>
+
+        -->
+        <ion-slide>
+            <ion-card>
+                <ion-card-header>
+                    <ion-card-title>
+                        SET OF ORDERS
+                    </ion-card-title>
+                    <ion-card-subtitle>
+                        <ion-text>
+                            <p>
+                                Please introduce the set of orders for the rover, only ( "L" "R" "A") characters are allowed. Alternatively you can also use your keyboard arrows wich will be interpreted accordingly.
+
+                            </p>
+                        </ion-text>
+                    </ion-card-subtitle>
+                </ion-card-header>
+                <ion-card-content>
+                    <ion-grid>
+                        <ion-col>
+                            <ion-item>
+                                <ion-label position="floating">Introduce here the set</ion-label>
+                                <ion-input onkeydown="return  ( (event.code == 'KeyA') || ( event.code == 'KeyL') || ( event.code === 'KeyR')) " [(ngModel)]="lastOrder"></ion-input>
+
+                            </ion-item>
+                            <br>
+                            <ion-row>
+                                <ion-col>
+                                    <ion-button size="small" color="primary" (click)="addOrder()">ADD</ion-button>
+                                </ion-col>
+                                <ion-col>
+                                    <ion-button size="small" color="danger" (click)="clearLastOrder()">CLEAR</ion-button>
+                                </ion-col>
+                            </ion-row>
+                        </ion-col>
+                    </ion-grid>
+                </ion-card-content>
+            </ion-card>
+            <ion-card>
+                <ion-card-header>
+                    <ion-card-title>
+                        ADD SET OF ORDERS
+                    </ion-card-title>
+                    <ion-card-subtitle>
+                        <ion-text>
+                            <p>
+                                If you want to remove some orders click on the
+                                <ion-text color="danger"> red X</ion-text>. Rememver to use the keyboard arrows to add orders more easily. Also, use "SPACEBAR" to clear the orders and "ENTER" to begin the trip. Good luck!
+
+                            </p>
+
+                        </ion-text>
+                    </ion-card-subtitle>
+                </ion-card-header>
+                <ion-card-content>
+                    <ion-grid>
+                        <ion-col>
+                            <ion-row>
+                                <ion-chip class="chip" color="tertiary" size="small" outline="true" *ngFor="let ord of orders; let i = index;">
+                                    {{i + 1}}&nbsp; .
+                                    <ion-label>{{ ord }}</ion-label>
+                                    <ion-icon name="{{ ord | convertDirectionToArrow }}"></ion-icon>
+                                    <ion-icon name="close" color="danger" (click)="deleteThisOrder(i)"></ion-icon>
+
+
+                                </ion-chip>
+                            </ion-row>
+
+
+                            <ion-button expand="full" [disabled]=" orders?.length == 0" size="small" color="danger" (click)="clear()"> REMOVE ALL ORDERS</ion-button>
+
+
+                        </ion-col>
+                    </ion-grid>
+                </ion-card-content>
+            </ion-card>
+        </ion-slide>
+    </ion-slides>
+</ion-content>
+<ion-footer>
+    <ion-button [color]="( slideIndex !== 2 ) ? 'primary' : 'success'" [disabled]="disabledButton" expand="full" (click)=" ( slideIndex !== 2 ) ?  slideNext() : beginTrip()">
+        {{ slideIndex !== 2 ? 'NEXT' : 'BEGIN TRIP'}}
+    </ion-button>
+</ion-footer>

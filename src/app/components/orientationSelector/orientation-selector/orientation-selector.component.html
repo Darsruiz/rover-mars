@@ -1,0 +1,56 @@
+<ion-card>
+    <ion-card-header>
+        <ion-card-title>
+            Select the initial orientation of the rover
+        </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+        <ion-col>
+            <ion-row>
+                <ion-col>
+
+                </ion-col>
+                <ion-col>
+                    <ion-icon [color]="orientationVal === 'N' ? 'success' : null" (click)="setOrientation('N')" name="arrow-up">
+                    </ion-icon>
+                </ion-col>
+                <ion-col>
+
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col>
+                    <ion-icon [color]="orientationVal === 'W' ? 'success' : null" (click)="setOrientation('W')" name="arrow-back">
+
+                    </ion-icon>
+                </ion-col>
+                <ion-col></ion-col>
+                <ion-col>
+                    <ion-icon [color]="orientationVal === 'E' ? 'success' : null" (click)="setOrientation('E')" name="arrow-forward">
+
+                    </ion-icon>
+                </ion-col>
+
+            </ion-row>
+            <ion-row>
+                <ion-col></ion-col>
+                <ion-col>
+                    <ion-icon [color]="orientationVal === 'S' ? 'success' : null" (click)="setOrientation('S')" name="arrow-down">
+
+                    </ion-icon>
+                </ion-col>
+                <ion-col></ion-col>
+            </ion-row>
+            <ion-row>
+            </ion-row>
+            <ion-row>
+                <ion-item>
+                    <ion-label slot="start">Orientation: </ion-label>
+                    <ion-chip slot="end" color="primary">{{orientationVal}} </ion-chip>
+                </ion-item>
+            </ion-row>
+        </ion-col>
+    </ion-card-content>
+
+
+</ion-card>
