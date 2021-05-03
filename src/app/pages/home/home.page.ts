@@ -1,6 +1,6 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { HostListener } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { IonSlides } from '@ionic/angular';
 import { HelpersService } from 'src/app/service/helpers.service';
 import { Rover } from '../../interfaces/interfaces';
@@ -9,7 +9,7 @@ import { Rover } from '../../interfaces/interfaces';
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage {
+export class HomePage implements AfterViewInit {
 
   inSquareHeight: boolean = true; // check if inside square
   inSquareWidth: boolean = true; // check if inside square
@@ -24,15 +24,28 @@ export class HomePage {
 
   arrayOfAcceptedValues = [ 'L', 'A', 'R']; // Possible orders
   disabledButton = false // to change state of button deppending on validation of inputs
-  @ViewChild('sliderSettings', { static: true }) private slides : IonSlides;
+  @ViewChild('sliderSettings', { static: true }) public slides : IonSlides;
 
   slideIndex: number = 0 // current slide index
 
 
   constructor( 
     private router: Router,
+    private activatedRoute: ActivatedRoute,
     public helpers: HelpersService
-    ) { }
+    ) { 
+      this.activatedRoute.url.subscribe((route)=>{
+        // Here I make sure I reset the lockswipe in case I navigated back from the Page Trip;
+        if(this.slides){
+          this.slides.lockSwipes(true)
+        }
+      })
+
+    }
+
+  ngAfterViewInit(){
+    this.slides.lockSwipes(true);
+  }
 
   @HostListener('document:keydown', ['$event'])
 
@@ -78,6 +91,9 @@ export class HomePage {
     this.router.navigateByUrl('trip').then( () => {
       this.helpers.secondsLeft = 4 ;
       // We use an interval to stablish a nice countdown effect on the Trip Page.
+
+      // We unlock the slides so that when we come back works fine
+      this.slides.lockSwipes(false)
       const countDown = setInterval( () => {
         this.helpers.secondsLeft -= 1
       }, 1000 )
@@ -163,7 +179,7 @@ export class HomePage {
     this.helpers.roverMovement.next(this.rover);
     this.checkIfButtonDisabled()
   }
-  
+
   // Resets rover position
 
   resetRoverToZeroZero(){
@@ -191,6 +207,8 @@ export class HomePage {
   
   async slideNext(){
 
+    this.slides.lockSwipes(false);
+
     // trigger action of changing to next slide programmatically
 
     await this.slides.slideNext();
@@ -203,10 +221,15 @@ export class HomePage {
         this.resetRoverToZeroZero()
         
       }
+
+      
+
+    
     })
 
     // we check if we must disable button or not
     this.checkIfButtonDisabled();
+    this.slides.lockSwipes(true)
   }
   
   // Necessary actions to be taken on slidechanged

@@ -31,6 +31,8 @@ export class TripPage implements OnInit {
 
   navigateBack(){
     this.router.navigateByUrl('home').then(()=>{
+
+      // I reset the state of trip to preparing;
       this.helpers.stateTrip = 'preparing';
     })
     
