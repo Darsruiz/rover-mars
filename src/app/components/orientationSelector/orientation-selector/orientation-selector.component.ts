@@ -8,7 +8,6 @@ import { Component, Output, EventEmitter, Input } from '@angular/core';
 export class OrientationSelectorComponent {
 
   @Output() orientation = new EventEmitter< 'N' | 'S' | 'E' | 'W'>();
-  @Input() resetOrientation;
   orientationVal: (  'N' | 'S' | 'E' | 'W') = 'N';
 
   setOrientation( orientation: 'N' | 'S' | 'E' | 'W' ){

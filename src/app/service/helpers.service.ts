@@ -41,14 +41,16 @@ constructor( private toaster: ToastController){
       return this.square
     }
 
-    // this method will check if the coordinates given are inside the square
+    // This method will check if the coordinates given are inside the square
+
       checkIfInsideSquare(square: Square , coordinates: Coordinates ): boolean{
 
       const maxWidth = square.width; // The max width of the square will be the width of the square.
       const maxHeight = square.height; // The max height of the square will be the height of the square.
 
       // so we check if coordinates are within those boundaries and also positive number
-      return  ( coordinates.xWidth <= maxWidth ) && ( coordinates.yHeight <= maxHeight )
+      return  ( coordinates.xWidth <= maxWidth ) 
+      && ( coordinates.yHeight <= maxHeight )
       && ( coordinates.xWidth >= 0 && coordinates.yHeight >= 0 )
     }
 
@@ -61,7 +63,8 @@ constructor( private toaster: ToastController){
     
     
     
-    // this method will return the actual orientation and the new direction
+    // This method will return the actual orientation and the new direction after receiving an order
+
     changeOrientation( direction: string, orientation: string ):string {
       // we assume the rover can only change orientation when he receives either Left (L) or Right (R) Direction
       
@@ -109,7 +112,7 @@ constructor( private toaster: ToastController){
       }
     }
     
-    //  this method gets me the new coordinates where i want to go and where I should be able to
+    //  This method gets me the new coordinates where i want to go and where I should be able to
     //  go if that coordinate is not outside of the square
     
     getNewCoordinateWhereIWantToGo( actualCoordinate: Coordinates, orientation: string ): Coordinates{
@@ -195,7 +198,10 @@ constructor( private toaster: ToastController){
   }
   
   
-  
+  // I had to create a promise in order to await for the setTimeouts inside of the forEach to
+  // execute their orders. This is completely unnecessary but I added it because adds a nice 
+  // arcade effect on the movement, rather than an instanct execution than the forEach.
+
   promiseOfSteps(directions: string[], rover: Rover, square:Square){
     this.stateTrip = 'ongoing';
     let delay = 300;
@@ -221,8 +227,10 @@ constructor( private toaster: ToastController){
             }
             
             if(directions.length === (index+1)) {
+
               // this means is the last execution of the bucle so here we end the promise successfully;
               // if was a disaster we return a false, if was successfull we return a TRUE
+
               const res = !(this.stateTrip === 'disaster') 
               response(res);
             }

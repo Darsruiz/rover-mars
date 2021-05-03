@@ -150,12 +150,11 @@ export class HomePage {
 
 
 
-
-
   
   updateSquare(ev){
     this.helpers.square[ev.what] = parseInt(ev.ev) ? parseInt(ev.ev) : 0;
   }
+
 
   initialOrientationOfRover(ev){
     // setup of the initial orientation of rover
@@ -165,6 +164,8 @@ export class HomePage {
     this.checkIfButtonDisabled()
   }
   
+  // Resets rover position
+
   resetRoverToZeroZero(){
 
     // initial setups 
@@ -208,7 +209,8 @@ export class HomePage {
     this.checkIfButtonDisabled();
   }
   
-  async slideChanged(){
+  // Necessary actions to be taken on slidechanged
+ async slideChanged(){
     
     // actions to be taken every time slide has changed, get index
     this.slideIndex = await this.slides.getActiveIndex();
@@ -233,11 +235,11 @@ export class HomePage {
 
 /// INITIAL SETUP AND OTHERS /////
 
+
  
-  
+  // Here we check if we should disable or not the NEXT button
+
   checkIfButtonDisabled(){
-    
-    // here we check if we should disable or not the NEXT button
     
     if( this.slideIndex < 2 ){
       this.disabledButton = ! ( this.inSquareHeight && this.inSquareWidth);
@@ -248,22 +250,26 @@ export class HomePage {
     }
   }
 
-
+  // Check initial coordinates of rover
   
   initialCoordinatesOfRover(ev){
-
-    // set initial coordinates of rover
+    
 
     const coordNumb = parseInt(ev.ev) ? parseInt(ev.ev) : 0;
     const name = ev.what === 'height' ? 'yHeight' : 'xWidth';
     this.rover.coordinates[name] = coordNumb;
 
-    // check if coordiantes are in range and we use inSquareWidth and Height to persist the data 
+    // check if coordiantes are in range and we use inSquareWidth and inSquareHeight to persist the data 
 
     if(this.helpers.checkIfInsideSquare(this.helpers.getSquare(), this.rover.coordinates)){
       this.inSquareHeight = this.inSquareWidth = true;
+
+      // If rover is inside we pass it to the observable that tracks movement
       this.helpers.roverMovement.next(this.rover);
     } else{
+
+      // The given position is outside of the square
+
       if(this.rover.coordinates.xWidth >= this.helpers.getSquare().width){
         this.inSquareWidth = false;
       }else{
@@ -276,15 +282,11 @@ export class HomePage {
         this.inSquareHeight = true;
       }
       
-      
     }
     
     this.checkIfButtonDisabled()
     
-    
   }
-
-  // KEYBOARD
 
 
 
