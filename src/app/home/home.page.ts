@@ -7,6 +7,15 @@ import { Component } from '@angular/core';
 })
 export class HomePage {
 
+  width: number;
+  height: number;
+
   constructor() {}
 
+  getWidth() {
+
+  }
+  getHeight() {
+
+  }
 }

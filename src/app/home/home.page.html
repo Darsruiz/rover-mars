@@ -18,3 +18,8 @@
     <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
   </div>
 </ion-content>
+
+<input name="width" id="width" [ngModel]="getWidth()" type="number" min="0" max="999" value="10">
+<input name="height" id="height" [ngModel]="getHeight()" type="number" min="0" max="999" value="10">
+
+<div id="square" [style.width]='getWidth()' [style.height]='getHeight()' ></div>
