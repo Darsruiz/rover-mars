@@ -6,7 +6,7 @@ import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 })
 export class RoverComponent {
 
-  @Input() orientation: 'N' | 'S' | 'E' | 'W'= 'N'
+  @Input() orientation: 'N' | 'S' | 'E' | 'W' = 'N'
   @Input() xWidth: number;
   @Input() yHeight: number;
   @Input() success: boolean;

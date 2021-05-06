@@ -14,6 +14,8 @@
                         THE TRIP FINISHED, HERE ARE THE RESULTS
                     </ion-card-title>
                     <ion-card-content>
+
+
                         <app-rover [success]="( helpers.rover$ | async )?.successTrip" [xWidth]="( helpers.rover$ | async )?.coordinates?.xWidth" [yHeight]="( helpers.rover$ | async )?.coordinates?.yHeight" [orientation]="( helpers.rover$ | async )?.orientation" [style.bottom]=" ( helpers.rover$ | async )?.coordinates?.yHeight | addPx"
                             [style.left]="( helpers.rover$ | async )?.coordinates?.xWidth | addPx"></app-rover>
 
@@ -31,7 +33,7 @@
 
 
 
-<div *ngIf="!finished" class="square" [style.width]="getWidth()" [style.height]="getHeight()">
+<div class="square" [style.width]="getWidth()" [style.height]="getHeight()">
 
 
     <app-rover class="rover" [success]="( helpers.rover$ | async )?.successTrip" [xWidth]="( helpers.rover$ | async )?.coordinates?.xWidth" [yHeight]="( helpers.rover$ | async )?.coordinates?.yHeight" [orientation]="( helpers.rover$ | async )?.orientation"

@@ -20,12 +20,14 @@ export class HelpersService {
 
  public stateTrip: 'preparing' | 'ongoing' | 'success' | 'disaster' = 'preparing'; 
  
- public delay:number = 400; // time delay between orders currently not being used for lack of time to implement it
+ public delay: number = 400; // time delay between orders currently not being used for lack of time to implement it
 
  public square: Square = {
   height: 300,
   width: 500
 }
+
+currentRover: Rover;
  
 
 
@@ -165,6 +167,7 @@ constructor( private toaster: ToastController){
         // is allowed to go so let's execute the method move;
         
         rover.coordinates = targetCoordinates;
+        this.currentRover = rover;
         this.roverMovement.next(rover);
         // return rover
         
@@ -172,6 +175,7 @@ constructor( private toaster: ToastController){
         
         // is not allowed to move because it's outside
         rover.successTrip = false;
+        this.currentRover = rover;
         this.roverMovement.next(rover);
         this.stateTrip = 'disaster'
       }
@@ -195,6 +199,17 @@ constructor( private toaster: ToastController){
       this.stateTrip = 'disaster';
     }
     
+  }
+
+  arcadeTrip(direction ){
+    if( (direction === 'R' ) || ( direction === 'L' )){
+      console.log('206')
+      this.currentRover.orientation = this.changeOrientation(direction, this.currentRover.orientation) as any
+
+    }else{
+      console.log('210')
+      this.moveRover(this.currentRover, direction, this.square );
+    }
   }
   
   

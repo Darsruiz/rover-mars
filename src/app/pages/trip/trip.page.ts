@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { HelpersService } from '../../service/helpers.service';
+import { Rover } from '../../interfaces/interfaces';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-trip',
   templateUrl: './trip.page.html',
@@ -11,6 +13,10 @@ export class TripPage implements OnInit {
   finished = false;
   constructor( private router: Router, public helpers: HelpersService ) {
    }
+   xWidth;
+   yHeight
+   orientation;
+   currentRover:Rover;
 
   ngOnInit() {
 
@@ -29,6 +35,34 @@ export class TripPage implements OnInit {
   }
 
 
+  @HostListener('document:keydown', ['$event'])
+
+  // this function handles keyboard events
+
+  handleKeyboardEvent(event: KeyboardEvent) {
+    // handles keyboard activity to make it more arcade
+
+    if (event.code === 'ArrowUp'){
+      console.log('A')
+      this.helpers.arcadeTrip('A')
+
+    }else if(event.code === 'ArrowRight'){
+      console.log('R')
+      this.helpers.arcadeTrip('R')
+
+    }else if(event.code === 'ArrowLeft'){
+      console.log('L')
+      this.helpers.arcadeTrip('L')
+
+    }else{
+
+    }
+
+  
+  } 
+
+
+
   navigateBack(){
     this.router.navigateByUrl('home').then(()=>{
 
@@ -37,6 +71,10 @@ export class TripPage implements OnInit {
     })
     
   }
+
+ 
+
+
 
   successTrip(){
     this.helpers.presentToast('Congratulations for your successfull trip, please come back!', 'success', 5000);

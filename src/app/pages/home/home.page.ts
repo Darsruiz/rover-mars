@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { IonSlides } from '@ionic/angular';
 import { HelpersService } from 'src/app/service/helpers.service';
 import { Rover } from '../../interfaces/interfaces';
+
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -24,7 +25,9 @@ export class HomePage implements AfterViewInit {
 
   arrayOfAcceptedValues = [ 'L', 'A', 'R']; // Possible orders
   disabledButton = false // to change state of button deppending on validation of inputs
+
   @ViewChild('sliderSettings', { static: true }) public slides : IonSlides;
+  
 
   slideIndex: number = 0 // current slide index
 
@@ -35,6 +38,7 @@ export class HomePage implements AfterViewInit {
     public helpers: HelpersService
     ) { 
       this.activatedRoute.url.subscribe((route)=>{
+        
         // Here I make sure I reset the lockswipe in case I navigated back from the Page Trip;
         if(this.slides){
           this.slides.lockSwipes(true)
@@ -45,24 +49,24 @@ export class HomePage implements AfterViewInit {
 
   ngAfterViewInit(){
     this.slides.lockSwipes(true);
+    console.log('SLIDE FORM VIEWCHILD', this.slides)
   }
 
+  
   @HostListener('document:keydown', ['$event'])
 
     // this function handles keyboard events
 
     handleKeyboardEvent(event: KeyboardEvent) {
-      console.log('handle keyboard event', event)
       // handles keyboard activity to make it more arcade
+      
       if(this.slideIndex === 2){
       const key = event.key.toUpperCase();
       let value;
-    
       if( this.helpers.isAcceptedArrow(event)
       ){
       value = this.helpers.convertEventsToDirections(event)
       this.orders.push(value);
-      
       
       } else if( this.helpers.isAcceptedArrow(key))
     {
@@ -70,10 +74,7 @@ export class HomePage implements AfterViewInit {
         this.orders.push(value);
         this.helpers.trip(this.orders, this.rover , this.helpers.getSquare());
       } else if( event.code === 'Enter'){
-        
         this.addOrder()
-        
-  
       }else if(event.code === 'Space'){
         this.orders = []
       } else { 
